@@ -62,7 +62,7 @@ class BloomFilter[T](m: Int, k: Int) {
 }
 
 object BloomFilter {
-  def optimalSize(expectedNumItems: Double, falsePositiveRate: Double): (Int, Int) = {
+  def optimalSize(expectedNumItems: Long, falsePositiveRate: Double): (Int, Int) = {
     val n = expectedNumItems
     val p = falsePositiveRate
     import scala.math._
@@ -71,7 +71,7 @@ object BloomFilter {
     (m.toInt, k.toInt)
   }
 
-  def optimallySized[T](expectedNumItems: Double, falsePositiveRate: Double): BloomFilter[T] = {
+  def optimallySized[T](expectedNumItems: Long, falsePositiveRate: Double): BloomFilter[T] = {
     val (m, k) = optimalSize(expectedNumItems, falsePositiveRate)
     new BloomFilter(m, k)
   }
