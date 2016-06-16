@@ -19,6 +19,8 @@ lazy val root = (project in file("."))
     version := "1.0",
     scalaVersion := "2.11.8",
     name := "probabilistic-data-structures",
-    libraryDependencies ++= Seq(),
+    libraryDependencies ++= Seq(
+      "org.scalacheck" %% "scalacheck" % "1.12.5" % "test"
+    ),
     scalacOptions ++= compilerOptions
   )
