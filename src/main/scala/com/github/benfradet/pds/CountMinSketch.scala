@@ -22,7 +22,7 @@ import scala.util.hashing.MurmurHash3
  * space needs and the probability of error when the sketch is queried. Associated with each of
  * the ''d'' rows is a separate hash function. The hash functions must be pairwise independent.
  * The parameters ''w'' and ''d'' can be chosen by setting ''w = ceil(e / eps)'' and
- * ''d = ceil(1 / delta'', where the error in answering a query is within a factor of ''eps''
+ * ''d = ceil(1 / delta)'', where the error in answering a query is within a factor of ''eps''
  * with probability ''delta''.
  *
  * When a new event of type ''i'' arrives we update as follows: for each of row ''j'' of the
@@ -37,7 +37,7 @@ import scala.util.hashing.MurmurHash3
  */
 class CountMinSketch[T](w: Int, d: Int) {
   def this(eps: Double, delta: Double) =
-    this(ceil(2 / eps).toInt, ceil(-log(1 - delta) / log(2)).toInt)
+    this(ceil(exp(1) / eps).toInt, ceil(-log(1 - delta) / log(2)).toInt)
 
   private val counts = Array.ofDim[Long](d, w)
 
