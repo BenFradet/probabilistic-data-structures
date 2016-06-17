@@ -35,7 +35,7 @@ import scala.util.hashing.MurmurHash3
  * Given the wanted percentage of false positives ''p'' and ''n'', ''m'' is
  * - (n ln p) / pow(ln 2, 2)
  *
- * This implementation has been heavily inspired by Breeze:
+ * This implementation has been heavily inspired by Breeze's:
  * https://github.com/scalanlp/breeze/blob/master/math/src/main/scala/breeze/util/BloomFilter.scala
  */
 class BloomFilter[T](m: Int, k: Int) {

@@ -34,6 +34,9 @@ import scala.util.hashing.MurmurHash3
  * the table. This estimate has the guarantee that ''â_i <= a_i + eps sum_j^n(a_j)'' with
  * probability ''1 - delta'' where ''a_i'' is the true frequency with which ''i'' occurred in the
  * stream.
+ *
+ * This implementation has been by inspired Algebird's:
+ * https://github.com/twitter/algebird/blob/develop/algebird-core/src/main/scala/com/twitter/algebird/CountMinSketch.scala
  */
 class CountMinSketch[T](w: Int, d: Int) {
   def this(eps: Double, delta: Double) =
