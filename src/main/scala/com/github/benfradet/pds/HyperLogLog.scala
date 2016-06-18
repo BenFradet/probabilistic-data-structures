@@ -15,11 +15,12 @@ class HyperLogLog[T](val numBits: Int) {
   /** @param rsd relative standard deviation */
   def this(rsd: Double) = this((log((1.106 / rsd) * (1.106 / rsd)) / log(2)).toInt)
 
+  /** relative standard deviation */
   val rsd = 1.106 / sqrt(exp(numBits * log(2)))
-  val accuracy = 1.04 / sqrt(pow(2, numBits.toDouble))
 
   private val bitSet = new BitSet(1 << numBits)
 
+  /** add an element to the hll */
   def add(elem: T): Unit = {
     val hash = MurmurHash3.mixLast(0, elem.##)
     // j is the binary address determined by the first b bits of hash between 0 and and 2^b
@@ -28,6 +29,7 @@ class HyperLogLog[T](val numBits: Int) {
     bitSet.updateIfGreater(j, r)
   }
 
+  /** Number of distinct element in the hll */
   def cardinality: Long = {
     val count = 1 << numBits
     val values = (0 until count).map(bitSet.get)
@@ -47,7 +49,7 @@ class HyperLogLog[T](val numBits: Int) {
   }
 }
 
-class BitSet(count: Int) {
+private class BitSet(count: Int) {
   private val LOG2_BITS_PER_WORD = 6
   private val REGISTER_SIZE = 5
   private val array = new Array[Int](sizeForCount(count))
