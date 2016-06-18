@@ -6,10 +6,10 @@ import scala.util.hashing.MurmurHash3
 /** @param numBits number of bits to use */
 class HyperLogLog[T](val numBits: Int) {
   /** @param rsd relative standard deviation */
-  def this(rsd: Double) = this(nbBits(rsd))
+  def this(rsd: Double) = this((log((1.106 / rsd) * (1.106 / rsd)) / log(2)).toInt)
 
   val rsd = 1.106 / sqrt(exp(numBits * log(2)))
-  val accuracy = 1.04 / sqrt(pow(2, numBits))
+  val accuracy = 1.04 / sqrt(pow(2, numBits.toDouble))
 
   private val bitSet = new BitSet(1 << numBits)
 
@@ -32,7 +32,6 @@ class HyperLogLog[T](val numBits: Int) {
     else round(estimate)
   }
 
-  private val nbBits = (rsd: Double) => (log((1.106 / rsd) * (1.106 / rsd)) / log(2)).toInt
   private val alphaMM = (p: Int, m: Int) => m * m * p match {
     case 4 => 0.673
     case 5 => 0.697
@@ -42,17 +41,17 @@ class HyperLogLog[T](val numBits: Int) {
 }
 
 class BitSet(count: Int) {
-  private val array = new Array[Int](sizeForCount(count))
   private val LOG2_BITS_PER_WORD = 6
   private val REGISTER_SIZE = 5
+  private val array = new Array[Int](sizeForCount(count))
 
   def updateIfGreater(pos: Int, value: Int): Unit = {
     val bucket = getBucket(pos)
     val shift = getShift(pos, bucket)
     val mask = 0x1f << shift
 
-    val curVal: Long = array(bucket) & mask
-    val newVal: Long = value << shift
+    val curVal: Long = (array(bucket) & mask).toLong
+    val newVal: Long = (value << shift).toLong
     if (curVal < newVal) array(bucket) = ((array(bucket) & ~mask) | newVal).toInt
   }
 

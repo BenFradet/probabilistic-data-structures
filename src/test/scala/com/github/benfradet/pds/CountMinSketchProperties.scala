@@ -6,7 +6,7 @@ import org.scalacheck.{Gen, Properties}
 class CountMinSketchProperties extends Properties("CountMinSketch") {
   def strsList(n: Int = 1000) = Gen.listOfN(n, Gen.alphaLowerChar.map(_.toString))
 
-  property("has at least the correct occurrences for each word") =
+  property("has at least the correct occurrence for each word") =
     forAll(strsList()) { (l: List[String]) =>
       val eps = 0.005
       val delta = 1E-8
