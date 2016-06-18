@@ -33,6 +33,8 @@ import scala.util.hashing.MurmurHash3
  *
  * This implementation has been inspired by:
  * https://github.com/addthis/stream-lib/blob/master/src/main/java/com/clearspring/analytics/stream/cardinality/HyperLogLog.java
+ *
+ * Reference paper: http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf
  */
 
 /** @param numBits number of bits to use */

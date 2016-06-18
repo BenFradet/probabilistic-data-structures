@@ -37,6 +37,8 @@ import scala.util.hashing.MurmurHash3
  *
  * This implementation has been by inspired Algebird's:
  * https://github.com/twitter/algebird/blob/develop/algebird-core/src/main/scala/com/twitter/algebird/CountMinSketch.scala
+ *
+ * Reference paper: http://dimacs.rutgers.edu/~graham/pubs/papers/cmencyc.pdf
  */
 class CountMinSketch[T](w: Int, d: Int) {
   def this(eps: Double, delta: Double) =
