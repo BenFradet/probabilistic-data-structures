@@ -3,6 +3,38 @@ package com.github.benfradet.pds
 import scala.math._
 import scala.util.hashing.MurmurHash3
 
+/**
+ * From: https://en.wikipedia.org/wiki/HyperLogLog
+ *
+ * HyperLogLog counts the number of distinct elements in a stream of data.
+ *
+ * Calculating the exact cardinality of a multiset requires an amount of memory proportional to
+ * the cardinality, which is impractical for very large datasets. Probabilistic cardinality
+ * estimators, such as the HyperLogLog algorithm, use significantly less memory than this, at the
+ * cost of obtaining an approximation of the cardinality. The HyperLogLog algorithm is able to
+ * estimate cardinalities of ''>10^9'' with a typical error rate of 2%, using 1.5kB of memory.
+ * HyperLogLog is an extension of the earlier LogLog algorithm.
+ *
+ * The basis of the HyperLogLog algorithm is the observation that the cardinality of a stream of
+ * uniformly random numbers can be estimated by calculating the maximum number of leading zeros
+ * in the binary representation of each number in the stream. If the maximum number of leading
+ * zeros observed is ''n'', an estimate for the number of distinct elements in the set is ''2^n^''.
+ *
+ * In the HyperLogLog algorithm a hash function is applied to each element in the original
+ * multiset, to obtain a multiset of uniformly distributed random numbers with the same
+ * cardinality as the original multiset. The cardinality of this randomly distributed set can be
+ * estimated using the algorithm above.
+ *
+ * The simple estimate of cardinality obtained using the algorithm above has the disadvantage of
+ * a large variance. In the HyperLogLog algorithm, the variance is minimised by splitting the
+ * multiset into numerous subsets, calculating the number of leading zeros in the numbers in each
+ * of these subsets, and using a harmonic mean to combine these estimates for each subset into an
+ * estimate of the cardinality of the whole set.
+ *
+ * This implementation has been inspired by:
+ * https://github.com/addthis/stream-lib/blob/master/src/main/java/com/clearspring/analytics/stream/cardinality/HyperLogLog.java
+ */
+
 /** @param numBits number of bits to use */
 class HyperLogLog[T](val numBits: Int) {
   /** @param rsd relative standard deviation */
